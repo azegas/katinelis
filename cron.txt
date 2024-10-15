@@ -1,42 +1,5 @@
-# crontab -l > cron.txt
-# crontab cron.txt
-# crontab -e
-# crontab -
-
-# dont use $USER - it will not find the user... at least did not bother to find how to make it work. .bashrc?
-
-# Explanation of the cron job syntax:
-# * * * * * command
-# | | | | |
-# | | | | +---- Day of the week (0 - 7) (Sunday = 0 or 7)
-# | | | +------ Month (1 - 12)
-# | | +-------- Day of the month (1 - 31)
-# | +---------- Hour (0 - 23)
-# +------------ Minute (0 - 59)
-
 # I am alive cron job every minute
-* * * * * echo "I am alive at $(date)" >> /home/arvypi/GIT/katinelis/logs/cron_aliveness.log 2>&1
+# * * * * * echo "I am alive at $(date)" >> /home/$(whoami)/GIT/katinelis/logs/cron_aliveness.log 2>&1
 
 # clean log files every 3 days
-0 0 */3 * * /home/arvypi/GIT/katinelis/helpers/clean_logs.sh
-
-# Run every day at 02:00 AM
-0 2 * * * /home/arvypi/venvs/venv-mm2/bin/python /home/arvypi/GIT/katinelis/fetches/rescuetime.py
-
-# Run every minute from 5:00 AM to 6:59 AM
-* 5-6 * * * /home/arvypi/venvs/venv-mm2/bin/python /home/arvypi/GIT/katinelis/fetches/invest_fetch_stock_data.py
-* 5-6 * * * /home/arvypi/venvs/venv-mm2/bin/python /home/arvypi/GIT/katinelis/fetches/cvbankas.py
-* 5-6 * * * /home/arvypi/venvs/venv-mm2/bin/python /home/arvypi/GIT/katinelis/fetches/raspberry_system_info.py
-* 5-6 * * * /home/arvypi/venvs/venv-mm2/bin/python /home/arvypi/GIT/katinelis/fetches/random_quote.py
-
-# Run every hour from 6:59 AM to 5:00 PM
-59 6-17 * * * /home/arvypi/venvs/venv-mm2/bin/python /home/arvypi/GIT/katinelis/fetches/invest_fetch_stock_data.py
-59 6-17 * * * /home/arvypi/venvs/venv-mm2/bin/python /home/arvypi/GIT/katinelis/fetches/cvbankas.py
-59 6-17 * * * /home/arvypi/venvs/venv-mm2/bin/python /home/arvypi/GIT/katinelis/fetches/raspberry_system_info.py
-59 6-17 * * * /home/arvypi/venvs/venv-mm2/bin/python /home/arvypi/GIT/katinelis/fetches/random_quote.py
-
-# Run every minute from 5:00 PM to 9:59 PM
-* 17-21 * * * /home/arvypi/venvs/venv-mm2/bin/python /home/arvypi/GIT/katinelis/fetches/invest_fetch_stock_data.py
-* 17-21 * * * /home/arvypi/venvs/venv-mm2/bin/python /home/arvypi/GIT/katinelis/fetches/cvbankas.py
-* 17-21 * * * /home/arvypi/venvs/venv-mm2/bin/python /home/arvypi/GIT/katinelis/fetches/raspberry_system_info.py
-* 17-21 * * * /home/arvypi/venvs/venv-mm2/bin/python /home/arvypi/GIT/katinelis/fetches/random_quote.py
+# 0 0 */3 * * /home/$(whoami)/GIT/katinelis/helpers/clean_logs.sh

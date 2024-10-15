@@ -1,4 +1,14 @@
-# mms == Magic mirror 2
+# Katinelis
+
+This repo was made by duplicating [this MM2 repo at this time](https://github.com/azegas/mm2/tree/e526029dbc7a5c8f6cc1cc5abc02875324583419)
+
+Monitor was ditched, since there was a need for it and mm2 could no longer be used. But what will we try to accomplish in this app is:
+
+- fetch sensor data - display as morning message in telegram
+- fetch cvbankas data - display as morning message in telegram
+- fetch random quote - display as morning message in telegram
+- motion sensor detects movement - sends alarm to telegram
+- have an option to fetch needed info at any time
 
 ## Install rasberry OS
 
@@ -10,95 +20,73 @@ For options:
 sudo raspi-config
 ```
 
-## Vertical monitor mode
+## About telegram
 
-I wish there was `screen layout editor` GUI in raspi settings display section present by default ([like here](https://www.makeuseof.com/how-to-rotate-your-raspberry-pi-screen-without-moving-the-display)), but it's not, so have to do it over the terminal.
+What the hell. Integration with telegram.
 
-```bash
-# check what my display is named (HDMI-0 or HDMI-1) 
-xrandr
-# rotate the display (no reboot needed)
-xrandr --output HDMI-1 --rotate left
-```
+Go to Telegram and search for the BotFather.
 
+Use the command /newbot to create a new bot and get your BOT_TOKEN.
 
-Lasting GUI way:
+For CHAT_ID - Open Telegram and search for your bot using its username (the one you created with BotFather).
+Start a chat with your bot by sending any message (e.g., "Hello").
 
-To install the "Screen Configuration" tool (known as arandr or the Raspberry Pi "Screen Layout Editor") on your Raspberry Pi, follow these steps:
+Then visit - https://api.telegram.org/bot<YOUR_BOT_TOKEN>/getUpdates
 
-```bash
-sudo apt install arandr
-```
+Look for the chat object in the JSON response. Your CHAT_ID will be listed there, typically as chat.id.
 
-Tuomet preferences -> screen configuration -> layout -> bla ir nusistatyk kaip reikia.
-
-
-## If GUI is not working anymore
-
-Default GUI - `pixel desktop`.
-
-```bash
-sudo apt update
-sudo apt upgrade
-sudo apt install --reinstall raspberrypi-ui-mods
-sudo raspi-config
-
-# Go to System Options.
-# Select Boot/Auto Login.
-# Choose Desktop GUI, automatically logged in or Desktop GUI, 
-# requiring login based on your preference.
-
-# reboot pi
-```
+Run the script, below, the stuff you give to it will be sent to telegram chat. WTFFF!!!!
 
 ## About all the services
 
 ## About cronjobs
 
+```bash
+# crontab -l > cron.txt
+# crontab cron.txt
+# crontab -e
+# crontab -
+
+# dont use $USER - it will not find the user... at least did not bother to find how to make it work. .bashrc?
+
+# Explanation of the cron job syntax:
+# * * * * * command
+# | | | | |
+# | | | | +---- Day of the week (0 - 7) (Sunday = 0 or 7)
+# | | | +------ Month (1 - 12)
+# | | +-------- Day of the month (1 - 31)
+# | +---------- Hour (0 - 23)
+# +------------ Minute (0 - 59)
+```
+
 ## Start chromium automatically by default
 
 `start_chromium.sh` file.
 
+## About services
 
-# Things TODO
+```bash
+# This service file runs the humidity sensor script as a systemd service
+# It ensures the script starts automatically on boot and restarts if it crashes
 
-- [x] max 9 jobs gali buti atvaizduojami
-- [ ] write to file how the temperature went during the night. Take reading at 5 different points in time maybe? separate cronjob? Then display them during in the magic mirror.
-- [x] write date when job was posted
-- [x] filter by job company
-- [ ] wind information
-- [ ] spanish word of the day
-- [x] paziurek ideju is lifeapi
-- [x] pridek rescuetime data
-- [x] koks oras madride
-- [x] pamegink linkedina del job searches
-- [x] pamegink google calendar embed i website (jokiu fetchu hopefully...) - possible, did it, but not actually needed for us
-- [ ] arba google trends explore trends - https://trends.google.com/trends/explore?hl=en-GB
-- [ ] google trends paskutiniu 24val LT - https://trends.google.com/trending?geo=LT&hl=en-GB&hours=24
-- [ ] google trends united states 4 hour - https://trends.google.com/trending?geo=US&hl=en-GB&hours=4
-- [x] alphavantage - tik 25 queires KRC - https://www.alphavantage.co/documentation/
-- [x] stocks - most advanced most declined
-- [x] stocks - top gainers
-- [x] stocks - top losers
-- [x] trading view stock charts from (unfortunately lags a lot) https://www.tradingview.com/widget-docs/widgets/symbol-details/
-- [x] stocks - volume
-- [x] quote of the day
-- [ ] google trends topics - https://trends.google.com/trending?geo=US
-- [ ] notification when big change happened or smth like that. or simply show todays trends in telegram kaip zinute
-- [x] raspberry pi uptime 
-- [x] Running eilutė kaip NASDAQe (labai trukineja ji raspberryje)
-- [ ] fondu duomenys - https://www.swedbank.lt/private/investor/funds/allFunds/list/details
-- [x] humidity inside
-- [x] temperature in
-- [x] temperature out
-- [ ] humidity UI sitaip SEK TIK 24h - https://i0.wp.com/blog.balena.io/wp-content/uploads/2021/07/sensev2.png?fit=1200%2C628&ssl=1
-- [x] log file for when was fetched and if successs or not (aisku matai in flask terminal, but anyway)
-- [ ] switch one the display kai kas nors priarteja - https://tutorials-raspberrypi.com/connect-and-control-raspberry-pi-motion-detector-pir/, https://www.youtube.com/watch?v=Tw0mG4YtsZk
-- [X] fix period for charts!!! make it dynamic
-- [x] covid cases (not so needed and kinda hard to fetch)
-- [x] population (not so needed and kinda hard to fetch)
-- [x] indication, that the page has refreshed
+chmod +x /home/arvypi/GIT/katinelis/fetches/raspberry_humidity.py
+sudo vi /etc/systemd/system/humidity-sensor.service
+sudo cp /home/arvypi/GIT/katinelis/services/humidity-sensor.service /etc/systemd/system/humidity-sensor.service
 
+sudo systemctl daemon-reload
+sudo systemctl start humidity-sensor.service
+sudo systemctl status humidity-sensor.service
+sudo systemctl stop humidity-sensor.service
+sudo journalctl -u humidity-sensor.service -f
+sudo systemctl enable humidity-sensor.service
+
+IF THE SERVICE IS NOT WORKING, TRY THE FOLLOWING:
+sudo systemctl stop humidity-sensor.service
+sudo systemctl disable humidity-sensor.service
+sudo rm /etc/systemd/system/humidity-sensor.service
+sudo systemctl daemon-reload
+sudo systemctl reset-failed humidity-sensor.service
+```
 
 # Docs
 
@@ -202,51 +190,6 @@ def read_cvbankas_data():
             data = json.load(file)
             return data
     return {"error": "Data not found"}
-```
-
-### Then we need to create a socket that the client can call:
-
-```python
-@socketio.on('request_from_client_to_server_for_cvbankas_data') # this is the socket that the client will call
-def handle_cvbankas_update_request():
-    # 'emit' is a Socket.IO method used to send events from the server to the client
-    # An alternative could be 'send', but 'emit' is more flexible as it allows custom event names
-    # Here, it sends the 'response_from_server_to_client_with_cvbankas_data' event with the data from read_cvbankas_data()
-    emit('response_from_server_to_client_with_cvbankas_data', read_cvbankas_data())
-```
-
-### Then we describe how often the client will be calling the socket:
- 
-```js
-setInterval(() => {
-    socket.emit('request_from_client_to_server_for_cvbankas_data');
-}, 1000);
-```
-
-### Describe what will happen when the data is received:
-
-Server emitted `response_from_server_to_client_with_cvbankas_data`, so when the client gets `response_from_server_to_client_with_cvbankas_data` and data with it, it will call `updateCvbankasData(data)` (create this js function) in `domUpdates.js`
-
-Describe how the DOM will be changed with the received data:
-
-```js
-export function updateCvbankasData(data) {
-    const jobsContainer = document.getElementById('cvbankas_jobs');
-    jobsContainer.innerHTML = ''; // Clear previous content
-```
-
-Add this to `main.js`, dont forget to import the `updateCvbankasData` function from `domUpdates.js`
-
-```js
-socket.on('response_from_server_to_client_with_cvbankas_data', (data) => {
-    updateCvbankasData(data);
-});
-```
-
-### A place where the data will be displayed:
-
-```html
-<div id="cvbankas_jobs" class="row"></div>
 ```
 
 ### Schedule that script to run periodically (and periodically save the data to the file)
