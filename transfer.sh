@@ -14,7 +14,7 @@ rsync -av --delete \
     --exclude='logs' \
     --exclude='data' \
     --exclude='static/images' \
-    ../ "${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_PATH}"
+    . "${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_PATH}"
 
 if [ $? -ne 0 ]; then
     echo "Failed to transfer files."

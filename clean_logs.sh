@@ -2,8 +2,8 @@
 
 # List of log files to clean
 log_files=(
-    "/home/$USER/GIT/katinelis/logs/app.log"
-    "/home/$USER/GIT/katinelis/logs/cron_aliveness.log"
+    "/home/$USER/GIT/katinelis/app.log"
+    "/home/$USER/GIT/katinelis/cron_aliveness.log"
 )
 
 # Function to clean a log file

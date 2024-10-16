@@ -1,122 +1,87 @@
-from flask import Flask, jsonify, render_template
-import os
+"""
+tempe - temperatura/dregme namuose
+citke - dienos citata
+"""
+
 import json
+import requests
+import os
+import time
 from dotenv import load_dotenv
-from flask_socketio import SocketIO, emit
-from log_config import logger
+
+# TODO logging to each step like in ahs
+
 
 load_dotenv()
-base_dir = os.getenv("BASE_DIR")
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+CHAT_ID = os.getenv("CHAT_ID")
+BASE_DIR = os.getenv("BASE_DIR")
 
-app = Flask(__name__)
-socketio = SocketIO(app)
+
+def get_quote_data():
+    file_path_random_quote = os.path.join(BASE_DIR, "data/random_quote.json")
+    with open(file_path_random_quote) as f:
+        data = json.load(f)
+        return data
 
 
-# ------------------------------
-# Functions to be used
-# ------------------------------
+def format_quote(quote_data):
+    return f"Quote: {quote_data['quote']['content']}\nAuthor: {quote_data['quote']['author']}"
 
-def read_stock_data():
-    file_path = os.path.join(base_dir, "data/stock_data.json")
-    if os.path.exists(file_path):
-        with open(file_path, "r") as file:
-            data = json.load(file)
-            return data
-    return {"error": "Data not found"}
 
-def read_sensor_data():
-    file_path = os.path.join(base_dir, "data/sensor_data.json")
-    if os.path.exists(file_path):
-        with open(file_path, "r") as file:
-            data = json.load(file)
-            return data
-    logger.warning("Sensor data file not found")
-    return {"error": "Data not found"}
+def send_quote_to_telegram(quote_text):
+    url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
+    payload = {"chat_id": CHAT_ID, "text": quote_text}
+    requests.post(url, data=payload)
 
-def read_cvbankas_data():
-    file_path = os.path.join(base_dir, "data/cvbankas_ads.json")
-    if os.path.exists(file_path):
-        with open(file_path, "r") as file:
-            data = json.load(file)
-            if 'jobs' in data and isinstance(data['jobs'], list):
-                data['jobs'] = data['jobs'][:9]  # Limit to 6 jobs
-            return data
-    return {"error": "Data not found"}
 
-def read_system_info():
-    file_path = os.path.join(base_dir, "data/system_info.json")
-    if os.path.exists(file_path):
-        with open(file_path, "r") as file:
-            data = json.load(file)
-            return data
-    return {"error": "Data not found"}
+def get_sensor_data():
+    file_path_random_quote = os.path.join(BASE_DIR, "data/sensor_data.json")
+    with open(file_path_random_quote) as f:
+        data = json.load(f)
+        return data
 
-def read_random_quote():
-    file_path = os.path.join(base_dir, "data/random_quote.json")
-    if os.path.exists(file_path):
-        with open(file_path, "r") as file:
-            data = json.load(file)
-            return data
-    return {"error": "Data not found"}
 
-def read_rescuetime_data():
-    file_path = os.path.join(base_dir, "data/rescuetime_data.json")
-    if os.path.exists(file_path):
-        with open(file_path, "r") as file:
-            data = json.load(file)
-            return data
-    return {"error": "Data not found or invalid format"}
+def format_sensor_data(sensor_data):
+    return f"Temperature: {sensor_data['temperature']}\nHumidity: {sensor_data['humidity']}"
 
-# SocketIO Event Handlers (BACKEND, SERVER)
-# Listening for incoming connections such as `request_from_client_to_server_for_stock_data`
-# and sending back the data(that we received over `read_stock_data`) 
-# to the client over `response_from_server_to_client_with_stock_data`
 
-@socketio.on('connect')
-def event_handler_connect():
-    """
-    Event handler for client connection.
-    When a client connects, it sends initial data for all components.
-    """
-    emit('response_from_server_to_client_with_stock_data', read_stock_data())
-    emit('response_from_server_to_client_with_cvbankas_data', read_cvbankas_data())
-    emit('response_from_server_to_client_with_sensor_data', read_sensor_data())
-    emit('response_from_server_to_client_with_rescuetime_data', read_rescuetime_data())
+def send_sensor_data_to_telegram(sensor_text):
+    url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
+    payload = {"chat_id": CHAT_ID, "text": sensor_text}
+    requests.post(url, data=payload)
 
-@socketio.on('request_from_client_to_server_for_stock_data')
-def event_handler_stock():
-    emit('response_from_server_to_client_with_stock_data', read_stock_data())
 
-@socketio.on('request_from_client_to_server_for_sensor_data')
-def event_handler_sensor():
-    emit('response_from_server_to_client_with_sensor_data', read_sensor_data())
+def get_updates(offset=None):
+    url = f"https://api.telegram.org/bot{BOT_TOKEN}/getUpdates"
+    params = {"offset": offset, "timeout": 100}  # Long polling
+    response = requests.get(url, params=params)
+    return response.json()
 
-@socketio.on('request_from_client_to_server_for_cvbankas_data')
-def event_handler_cvbankas():
-    emit('response_from_server_to_client_with_cvbankas_data', read_cvbankas_data())
 
-@socketio.on('request_from_client_to_server_for_system_info_data')
-def event_handler_system_info():
-    emit('response_from_server_to_client_with_system_info_data', read_system_info())
+def main():
+    print("App started")
+    offset = None
+    while True:
+        print("Pooling...")
+        updates = get_updates(offset)
+        for update in updates["result"]:
+            offset = update["update_id"] + 1  # Update offset for the next request
+            chat_id = update["message"]["chat"]["id"]
+            text = update["message"]["text"]
 
-@socketio.on('request_from_client_to_server_for_random_quote_data')
-def event_handler_random_quote():
-    emit('response_from_server_to_client_with_quote_data', read_random_quote())
+            if text == "/tempe":
+                sensor_data = get_sensor_data()
+                sensor_text = format_sensor_data(sensor_data)
+                send_sensor_data_to_telegram(sensor_text)
 
-@socketio.on('request_from_client_to_server_for_rescuetime_data')
-def event_handler_rescuetime():
-    emit('response_from_server_to_client_with_rescuetime_data', read_rescuetime_data())
+            if text == "/citke":
+                quote_data = get_quote_data()
+                quote_text = format_quote(quote_data)
+                send_quote_to_telegram(quote_text)
 
-@app.route("/")
-def home():
-    return render_template("index.html")
+        time.sleep(1)  # Sleep for a second before polling again
+
 
 if __name__ == "__main__":
-    # Run the Flask application with SocketIO
-    socketio.run(
-        app, 
-        debug=True, 
-        host='0.0.0.0', 
-        port=5000, # sudo lsof -i :5000 and sudo kill -9 PID
-        allow_unsafe_werkzeug=True # so could run as a service
-    )
+    main()

@@ -70,7 +70,7 @@ Run the script, below, the stuff you give to it will be sent to telegram chat. W
 # This service file runs the humidity sensor script as a systemd service
 # It ensures the script starts automatically on boot and restarts if it crashes
 
-chmod +x /home/arvypi/GIT/katinelis/fetches/raspberry_humidity.py
+chmod +x /home/arvypi/GIT/katinelis/fetches/pi_humidity.py
 sudo vi /etc/systemd/system/humidity-sensor.service
 sudo cp /home/arvypi/GIT/katinelis/services/humidity-sensor.service /etc/systemd/system/humidity-sensor.service
 

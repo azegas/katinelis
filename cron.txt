@@ -1,5 +1,5 @@
 # I am alive cron job every minute
-# * * * * * echo "I am alive at $(date)" >> /home/$(whoami)/GIT/katinelis/logs/cron_aliveness.log 2>&1
+# * * * * * echo "I am alive at $(date)" >> /home/$(whoami)/GIT/katinelis/cron_aliveness.log 2>&1
 
 # clean log files every 3 days
-# 0 0 */3 * * /home/$(whoami)/GIT/katinelis/helpers/clean_logs.sh
+# 0 0 */3 * * /home/$(whoami)/GIT/katinelis/clean_logs.sh

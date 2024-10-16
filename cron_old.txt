@@ -15,10 +15,10 @@
 # +------------ Minute (0 - 59)
 
 # I am alive cron job every minute
-* * * * * echo "I am alive at $(date)" >> /home/arvypi/GIT/katinelis/logs/cron_aliveness.log 2>&1
+* * * * * echo "I am alive at $(date)" >> /home/arvypi/GIT/katinelis/cron_aliveness.log 2>&1
 
 # clean log files every 3 days
-0 0 */3 * * /home/arvypi/GIT/katinelis/helpers/clean_logs.sh
+0 0 */3 * * /home/arvypi/GIT/katinelis/clean_logs.sh
 
 # Run every day at 02:00 AM
 0 2 * * * /home/arvypi/venvs/venv-mm2/bin/python /home/arvypi/GIT/katinelis/fetches/rescuetime.py
@@ -27,16 +27,16 @@
 * 5-6 * * * /home/arvypi/venvs/venv-mm2/bin/python /home/arvypi/GIT/katinelis/fetches/invest_fetch_stock_data.py
 * 5-6 * * * /home/arvypi/venvs/venv-mm2/bin/python /home/arvypi/GIT/katinelis/fetches/cvbankas.py
 * 5-6 * * * /home/arvypi/venvs/venv-mm2/bin/python /home/arvypi/GIT/katinelis/fetches/random_quote.py
-* 5-6 * * * /home/arvypi/venvs/venv-mm2/bin/python /home/arvypi/GIT/katinelis/fetches_pi/raspberry_system_info.py
+* 5-6 * * * /home/arvypi/venvs/venv-mm2/bin/python /home/arvypi/GIT/katinelis/fetches/pi_system_info.py
 
 # Run every hour from 6:59 AM to 5:00 PM
 59 6-17 * * * /home/arvypi/venvs/venv-mm2/bin/python /home/arvypi/GIT/katinelis/fetches/invest_fetch_stock_data.py
 59 6-17 * * * /home/arvypi/venvs/venv-mm2/bin/python /home/arvypi/GIT/katinelis/fetches/cvbankas.py
 59 6-17 * * * /home/arvypi/venvs/venv-mm2/bin/python /home/arvypi/GIT/katinelis/fetches/random_quote.py
-59 6-17 * * * /home/arvypi/venvs/venv-mm2/bin/python /home/arvypi/GIT/katinelis/fetches/raspberry_system_info.py
+59 6-17 * * * /home/arvypi/venvs/venv-mm2/bin/python /home/arvypi/GIT/katinelis/fetches/pi_system_info.py
 
 # Run every minute from 5:00 PM to 9:59 PM
 * 17-21 * * * /home/arvypi/venvs/venv-mm2/bin/python /home/arvypi/GIT/katinelis/fetches/invest_fetch_stock_data.py
 * 17-21 * * * /home/arvypi/venvs/venv-mm2/bin/python /home/arvypi/GIT/katinelis/fetches/cvbankas.py
 * 17-21 * * * /home/arvypi/venvs/venv-mm2/bin/python /home/arvypi/GIT/katinelis/fetches/random_quote.py
-* 17-21 * * * /home/arvypi/venvs/venv-mm2/bin/python /home/arvypi/GIT/katinelis/fetches/raspberry_system_info.py
+* 17-21 * * * /home/arvypi/venvs/venv-mm2/bin/python /home/arvypi/GIT/katinelis/fetches/pi_system_info.py
