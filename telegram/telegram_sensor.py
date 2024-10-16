@@ -13,7 +13,7 @@ def get_sensor_data():
     file_path_random_quote = os.path.join(BASE_DIR, "data/data_sensor.json")
     with open(file_path_random_quote) as f:
         data = json.load(f)
-        return f"Temperature: {data['temperature']}\nHumidity: {data['humidity']}"
+        return f"Dabartinė vidaus oro temperatūra: {data['temperature']} °C\nDabartinė vidaus oro drėgmė: {data['humidity']} %"
 
 
 def send_sensor_data_to_telegram(sensor_text):

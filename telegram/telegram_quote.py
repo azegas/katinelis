@@ -17,7 +17,7 @@ def get_quote_data():
     file_path_random_quote = os.path.join(BASE_DIR, "data/data_quote.json")
     with open(file_path_random_quote) as f:
         data = json.load(f)
-        return f"Quote: {data['quote']['content']}\nAuthor: {data['quote']['author']}"
+        return f"{data['quote']['content']} - {data['quote']['author']}"
 
 
 def send_quote_to_telegram(quote_text):

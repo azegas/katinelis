@@ -21,6 +21,34 @@ For options:
 sudo raspi-config
 ```
 
+## Environment
+
+```
+mkdir ~/venvs
+cd ~/venvs
+python -m venv venv-katinelis
+source ~/venvs/venv-katinelis/bin/activate
+mkdir ~/GIT
+cd ~/GIT
+git clone git@github.com:azegas/katinelis.git
+cd ~/GIT/katinelis
+pip install -r requirements.txt
+```
+
+Put into `.bashrc`, so environment is always activated:
+
+```
+vim ~/.bashrc
+
+# add these to the bottom of the file:
+source ~/venvs/venv-katinelis/bin/activate
+source ~/GIT/katinelis/.env
+cd ~/GIT/katinelis
+```
+
+
+
+
 ## Stocks
 
 For stock historical data, can use this free api - https://www.alphavantage.co/documentation/
@@ -74,6 +102,17 @@ def send_message(text):
 if __name__ == "__main__":
     main()
 ```
+
+Can also create shortcuts so user does not have to type the commands you want. Go to BotFather, choose `/setcommands` and write such commands:
+
+```
+labas - labas ir info
+citke - citata
+tempe - temperatura + dregme kiuciu chatoj
+jobs - cvbankas vadovo darbai
+```
+
+So now when someone is interacting wiht the bot, it can write `/` to see all the commands, and then pick a particular one, for example `/labas`.
 
 ## About all the services
 

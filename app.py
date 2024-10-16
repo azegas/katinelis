@@ -1,8 +1,3 @@
-"""
-tempe - temperatura/dregme namuose
-citke - dienos citata
-"""
-
 import requests
 import os
 import time
@@ -10,6 +5,7 @@ from dotenv import load_dotenv
 from telegram.telegram_sensor import message_sensor
 from telegram.telegram_quote import message_quote
 from telegram.telegram_cvbankas import message_cvbankas
+from telegram.telegram_hello import message_hello
 
 # TODO logging to each step like in ahs
 
@@ -43,15 +39,19 @@ def main():
 
                     print(f"{user} says: {text}")  # Log the received message
 
-                    if text == "/tempe":
+                    if text == "/labas@BotauskasBot" or text == "/labas":
+                        message_hello()
+                        print("response sent")
+
+                    elif text == "/tempe@BotauskasBot" or text == "/tempe":
                         message_sensor()
                         print("response sent")
 
-                    elif text == "/citke":
+                    elif text == "/citke@BotauskasBot" or text == "/citke":
                         message_quote()
                         print("response sent")
 
-                    elif text == "/jobs":
+                    elif text == "/jobs@BotauskasBot" or text == "/jobs":
                         message_cvbankas()
                         print("response sent")
 

@@ -31,12 +31,12 @@ def send_cvbankas_to_telegram(data):
     if "jobs" in data and isinstance(data["jobs"], list):
         message = "Latest Job Listings:\n\n"
         for job in data["jobs"]:
-            message += f"Title: {job['title']}\n"
-            message += f"Company: {job['company']}\n"
-            message += f"Salary: {job['salary']}\n"
-            message += f"City: {job['city']}\n"
-            message += f"Posted: {job['job_posted']}\n"
-            message += f"Href: {job['href']}\n\n"
+            message += f"Pavadinimas: {job['title']}\n"
+            message += f"Kompanija: {job['company']}\n"
+            message += f"Alga: {job['salary']}\n"
+            message += f"Miestas: {job['city']}\n"
+            message += f"Paskelbtas: {job['job_posted']}\n"
+            message += f"Nuoroda: {job['href']}\n\n"
     else:
         message = "No job listings available."
 
