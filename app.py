@@ -66,19 +66,27 @@ def main():
         print("Pooling...")
         updates = get_updates(offset)
         for update in updates["result"]:
-            offset = update["update_id"] + 1  # Update offset for the next request
-            chat_id = update["message"]["chat"]["id"]
-            text = update["message"]["text"]
+            # print(update)
+            if "message" in update:  # Check if 'message' key exists
+                message = update["message"]
+                if "text" in message:  # Check if 'text' key exists
+                    offset = (
+                        update["update_id"] + 1
+                    )  # Update offset for the next request
+                    text = message["text"]
+                    user = message["from"]["first_name"]
 
-            if text == "/tempe":
-                sensor_data = get_sensor_data()
-                sensor_text = format_sensor_data(sensor_data)
-                send_sensor_data_to_telegram(sensor_text)
+                    print(f"{user} says: {text}")  # Log the received message
 
-            if text == "/citke":
-                quote_data = get_quote_data()
-                quote_text = format_quote(quote_data)
-                send_quote_to_telegram(quote_text)
+                    if text == "/tempe":
+                        sensor_data = get_sensor_data()
+                        sensor_text = format_sensor_data(sensor_data)
+                        send_sensor_data_to_telegram(sensor_text)
+
+                    elif text == "/citke":  # Use elif to avoid checking both conditions
+                        quote_data = get_quote_data()
+                        quote_text = format_quote(quote_data)
+                        send_quote_to_telegram(quote_text)
 
         time.sleep(1)  # Sleep for a second before polling again
 

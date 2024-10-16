@@ -21,22 +21,59 @@ For options:
 sudo raspi-config
 ```
 
+## Stocks
+
+For stock historical data, can use this free api - https://www.alphavantage.co/documentation/
+
+But for live data - wont work, premium feature
+
 ## About telegram
 
-What the hell. Integration with telegram.
+Go to Telegram app on phone or on windows app and search for the `BotFather`.
 
-Go to Telegram and search for the BotFather.
-
-Use the command /newbot to create a new bot and get your BOT_TOKEN.
+Use the command `/newbot` to create a new bot and get your BOT_TOKEN.
 
 For CHAT_ID - Open Telegram and search for your bot using its username (the one you created with BotFather).
 Start a chat with your bot by sending any message (e.g., "Hello").
 
-Then visit - https://api.telegram.org/bot<YOUR_BOT_TOKEN>/getUpdates
+Then visit bot api link - `https://api.telegram.org/bot<YOUR_BOT_TOKEN>/getUpdates`
 
-Look for the chat object in the JSON response. Your CHAT_ID will be listed there, typically as chat.id.
+Look for the chat object in the JSON response. Your `CHAT_ID` will be listed there, typically as `chat.id`.
 
-Run the script, below, the stuff you give to it will be sent to telegram chat. WTFFF!!!!
+Use it for things.
+
+To use the bot in the GROUP chat, add the bot to the group chat as a member. Write any message into the chat, navigate to the bot api link like we did above,
+there you should see the chatid of a group chat (starts with -, must be added to .env with ''). 
+
+Now you should be able to send messages to the group chat.
+
+Simple app example:
+
+```py
+import json
+import requests
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+CHAT_ID = os.getenv("CHAT_ID")
+BASE_DIR = os.getenv("BASE_DIR")
+
+
+def main():
+    send_message("hello")
+
+
+def send_message(text):
+    url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
+    payload = {"chat_id": CHAT_ID, "text": text}
+    requests.post(url, data=payload)
+
+
+if __name__ == "__main__":
+    main()
+```
 
 ## About all the services
 
