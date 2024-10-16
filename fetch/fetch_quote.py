@@ -38,7 +38,7 @@ def write_quote_to_file(quote):
     output = {"quote": quote, "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M")}
 
     base_dir = os.getenv("BASE_DIR")
-    file_path = os.path.join(base_dir, "data/random_quote.json")
+    file_path = os.path.join(base_dir, "data/data_quote.json")
     os.makedirs(os.path.dirname(file_path), exist_ok=True)
 
     with open(file_path, "w") as f:

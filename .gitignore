@@ -1,5 +1,5 @@
 **/venv*/
-stock_data.json
+data_stock.json
 *.csv
 *.json
 *.png

@@ -14,6 +14,7 @@ from log_config import logger
 
 load_dotenv()
 
+
 def fetch_and_save_raspberry_system_info():
     logger.info("##########################################################")
     logger.info("Fetch raspberry system info START")
@@ -23,13 +24,13 @@ def fetch_and_save_raspberry_system_info():
     memory = psutil.virtual_memory().percent
     temp = CPUTemperature().temperature
     date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    
+
     # Calculate uptime
     seconds = time.monotonic()
     days, remainder = divmod(seconds, 86400)
     hours, remainder = divmod(remainder, 3600)
     minutes, seconds = divmod(remainder, 60)
-    
+
     if days == 1:
         uptime = f"1 day and {int(hours)}:{int(minutes):02d} hours"
     elif days > 1:
@@ -39,18 +40,18 @@ def fetch_and_save_raspberry_system_info():
             uptime = f"{int(minutes):02d}"
         else:
             uptime = f"{int(hours)}:{int(minutes):02d}"
-    
+
     info = {
         "timestamp": date,
         "cpu_usage": cpu,
         "memory_usage": memory,
         "temperature": temp,
-        "uptime": uptime
+        "uptime": uptime,
     }
 
     # Save to file
     base_dir = os.getenv("BASE_DIR")
-    file_path = os.path.join(base_dir, "data/system_info.json")
+    file_path = os.path.join(base_dir, "data/data_system.json")
     os.makedirs(os.path.dirname(file_path), exist_ok=True)
     with open(file_path, "w") as f:
         json.dump(info, f, indent=4)
@@ -64,6 +65,7 @@ def fetch_and_save_raspberry_system_info():
 
     logger.info("Fetch raspberry system info END")
     logger.info("##########################################################")
+
 
 if __name__ == "__main__":
     fetch_and_save_raspberry_system_info()

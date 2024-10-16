@@ -222,7 +222,7 @@ Frontend:
 
 ```python
 def read_cvbankas_data():
-    file_path = os.path.join(base_dir, "data/cvbankas_ads.json")
+    file_path = os.path.join(base_dir, "data/data_cvbankas.json")
     if os.path.exists(file_path):
         with open(file_path, "r") as file:
             data = json.load(file)

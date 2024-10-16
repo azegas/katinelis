@@ -3,3 +3,6 @@
 
 # clean log files every 3 days
 # 0 0 */3 * * /home/$(whoami)/GIT/katinelis/clean_logs.sh
+
+
+* * * * * /home/aze/venvs/venv-katinelis/bin/python /home/aze/GIT/katinelis/telegram/hello.py
