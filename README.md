@@ -9,6 +9,7 @@ Monitor was ditched, since there was a need for it and mm2 could no longer be us
 - fetch random quote - display as morning message in telegram
 - motion sensor detects movement - sends alarm to telegram
 - have an option to fetch needed info at any time
+- vix kasdien tikrinti
 
 ## Install rasberry OS
 
