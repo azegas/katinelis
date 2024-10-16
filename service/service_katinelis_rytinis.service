@@ -1,0 +1,12 @@
+[Unit]
+Description=Humidity Sensor Service
+After=network.target
+
+[Service]
+ExecStart=/home/arvypi/venvs/venv-katinelis/bin/python /home/arvypi/GIT/katinelis/rytinis.py
+WorkingDirectory=/home/arvypi/GIT/katinelis
+Restart=always
+User=arvypi
+
+[Install]
+WantedBy=multi-user.target

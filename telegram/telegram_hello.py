@@ -10,9 +10,10 @@ BASE_DIR = os.getenv("BASE_DIR")
 
 
 def message_hello():
+    message = "Labas, sveiki atvyke. Cia rasite ta ir ana. Noredami bla, rasykite '/' ir pasirinkite viena is pasirinkciu bla."
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
     payload = {
         "chat_id": CHAT_ID,
-        "text": "Labas, sveiki atvyke. Cia rasite ta ir ana. Noredami bla, rasykite '/' ir pasirinkite viena is pasirinkciu bla.",
+        "text": message,
     }
     requests.post(url, data=payload)
