@@ -125,6 +125,7 @@ def save_cvbankas_jobs(jobs):
         logger.error(f"Failed to save data: {e}")
 
 
+# TODO run this service as a service so get fresh jobs each day
 def main():
     jobs = fetch_cvbankas_jobs()
     filtered_jobs = filter_cvbankas_jobs(jobs)

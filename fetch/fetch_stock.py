@@ -9,6 +9,8 @@ import sys
 # Add the parent directory to sys.path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+# TODO fetch only specific stock, in our case - vix ir inform ar siandine good day ar ne
+
 from config import SYMBOLS
 from log_config import logger
 

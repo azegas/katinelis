@@ -7,7 +7,7 @@ from telegram.telegram_quote import message_quote
 from telegram.telegram_cvbankas import message_cvbankas
 from telegram.telegram_hello import message_hello
 
-# TODO logging to each step like in ahs
+# TODO logging to each step like in ahs. Logs for service statuses also
 
 load_dotenv()
 BOT_TOKEN = os.getenv("BOT_TOKEN")
