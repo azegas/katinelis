@@ -8,6 +8,8 @@ from telegram.telegram_cvbankas import message_cvbankas
 from telegram.telegram_quote import get_quote_data
 from telegram.telegram_sensor import get_sensor_data
 from datetime import datetime
+from fetch.fetch_weather import fetch_weather
+from fetch.fetch_nasa import fetch_nasa
 
 
 load_dotenv()
@@ -27,19 +29,25 @@ def message_rytine(message):
 
 def process():
     combined_message = (
-        f"Labas rytas! ☀️😙\n\n"
         f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n"
-        f"Orelis Kiuciu name: \n\n"
+        f"Labas rytas! ☀️😙\n\n"
+        f"Orelis Kiūčių name: \n\n"
         f"{get_sensor_data()}\n\n"
+        f"Orelis kieme: {fetch_weather()} °C\n\n"
         f"Dienos citata: \n\n"
         f"{get_quote_data()}\n\n"
+        f"Dienos NASA paveiksliukas: \n\n"
+        f"Pavadinimas: {fetch_nasa()['title']}\n"
+        f"Nuoroda: {fetch_nasa()['url']}\n\n"
+        # TODO menulis
+        # TODO saule teka/leidziasi
     )
     message_rytine(combined_message)
 
 
 def main():
 
-    process()
+    # process()
 
     SCHEDULE_TIME = "07:00"
 
