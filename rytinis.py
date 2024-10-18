@@ -5,7 +5,6 @@ from dotenv import load_dotenv
 import schedule
 from time import sleep
 from telegram.telegram_cvbankas import message_cvbankas
-from telegram.telegram_quote import get_quote_data
 from telegram.telegram_sensor import read_sensor_data
 from datetime import datetime
 from fetch.fetch_weather import fetch_weather
