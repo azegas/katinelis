@@ -31,9 +31,9 @@ def process():
     combined_message = (
         f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n"
         f"Labas rytas! ☀️😙\n\n"
-        f"Orelis Kiūčių name: \n\n"
+        f"Orelis Kiūčiuose: \n\n"
+        f"{fetch_weather()}\n"
         f"{get_sensor_data()}\n\n"
-        f"Orelis kieme: {fetch_weather()} °C\n\n"
         f"Dienos citata: \n\n"
         f"{get_quote_data()}\n\n"
         f"Dienos NASA paveiksliukas: \n\n"

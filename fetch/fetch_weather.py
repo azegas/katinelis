@@ -16,12 +16,15 @@ def fetch_weather():
     # Retrieve the observation for 06:00 am from the fetched data and return only airTemperature
     desired_observation = None
     for observation in data_fetched_from_api["observations"]:
-        if observation["observationTimeUtc"] == f"{date_str} 06:00:00":
-            desired_observation = observation["airTemperature"]
+        if observation["observationTimeUtc"] == f"{date_str} 03:00:00":
+            desired_observation = {
+                "airTemperature": observation["airTemperature"],
+                "windSpeed": observation["windSpeed"],
+            }
             break
     if desired_observation is None:
         return None
-    return desired_observation
+    return f"Kiemas: {desired_observation['airTemperature']}°C, {desired_observation['windSpeed']} m/s"
 
 
 def main():
