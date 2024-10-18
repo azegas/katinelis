@@ -9,7 +9,7 @@ CHAT_ID = os.getenv("CHAT_ID")
 BASE_DIR = os.getenv("BASE_DIR")
 
 
-def get_sensor_data():
+def read_sensor_data():
     file_path_random_quote = os.path.join(BASE_DIR, "data/data_sensor.json")
     with open(file_path_random_quote) as f:
         data = json.load(f)
@@ -23,5 +23,5 @@ def send_sensor_data_to_telegram(sensor_text):
 
 
 def message_sensor():
-    data = get_sensor_data()
+    data = read_sensor_data()
     return send_sensor_data_to_telegram(data)

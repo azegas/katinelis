@@ -6,10 +6,11 @@ import schedule
 from time import sleep
 from telegram.telegram_cvbankas import message_cvbankas
 from telegram.telegram_quote import get_quote_data
-from telegram.telegram_sensor import get_sensor_data
+from telegram.telegram_sensor import read_sensor_data
 from datetime import datetime
 from fetch.fetch_weather import fetch_weather
 from fetch.fetch_nasa import fetch_nasa
+from fetch.fetch_quote import fetch_quote
 
 
 load_dotenv()
@@ -33,12 +34,11 @@ def process():
         f"Labas rytas! ☀️😙\n\n"
         f"Orelis Kiūčiuose: \n\n"
         f"{fetch_weather()}\n"
-        f"{get_sensor_data()}\n\n"
+        f"{read_sensor_data()}\n\n"
         f"Dienos citata: \n\n"
-        f"{get_quote_data()}\n\n"
+        f"{fetch_quote()}\n\n"
         f"Dienos NASA paveiksliukas: \n\n"
-        f"Pavadinimas: {fetch_nasa()['title']}\n"
-        f"Nuoroda: {fetch_nasa()['url']}\n\n"
+        f"{fetch_nasa()}\n\n"
         # TODO menulis
         # TODO saule teka/leidziasi
     )

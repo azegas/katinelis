@@ -14,7 +14,7 @@ from log_config import logger
 load_dotenv()
 
 
-def fetch_random_quote():
+def fetch_quote():
     url = "https://api.quotable.io/random"
     try:
         # Create a custom SSL context that doesn't verify certificates
@@ -25,7 +25,7 @@ def fetch_random_quote():
         response = requests.get(url, verify=False)
         response.raise_for_status()  # Raise an exception for bad status codes
         data = response.json()
-        return {"content": data["content"], "author": data["author"]}
+        return f'"{data["content"]}" - {data["author"]}'
     except requests.RequestException as e:
         print(f"Error fetching quote: {e}")
         return {
@@ -34,26 +34,10 @@ def fetch_random_quote():
         }
 
 
-def write_quote_to_file(quote):
-    output = {"quote": quote, "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M")}
-
-    base_dir = os.getenv("BASE_DIR")
-    file_path = os.path.join(base_dir, "data/data_quote.json")
-    os.makedirs(os.path.dirname(file_path), exist_ok=True)
-
-    with open(file_path, "w") as f:
-        json.dump(output, f, indent=4)
-
-
 if __name__ == "__main__":
     # Suppress the InsecureRequestWarning
     requests.packages.urllib3.disable_warnings(
         requests.packages.urllib3.exceptions.InsecureRequestWarning
     )
-    logger.info("Fetch random quote START")
-    logger.info("##########################################################")
-    quote = fetch_random_quote()
-    logger.info(f"Quote: {quote}")
-    write_quote_to_file(quote)
-    logger.info("Fetch random quote END")
-    logger.info("##########################################################")
+    quote = fetch_quote()
+    print(f"Quote: {quote}")
