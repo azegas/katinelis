@@ -1,6 +1,5 @@
 import RPi.GPIO as GPIO
 import time
-import subprocess
 
 # Set up GPIO using BCM numbering
 GPIO.setmode(GPIO.BCM)
@@ -17,12 +16,6 @@ try:
     while True:
         if GPIO.input(MOTION_SENSOR_PIN):
             print("Motion detected!")
-            # Check if the screen is on or off
-            screen_status = subprocess.check_output(["vcgencmd", "display_power"], stderr=subprocess.STDOUT)
-            if b"0" in screen_status:
-                print("Screen is off")
-            else:
-                print("Screen is on")
         else:
             print("No motion")
         time.sleep(1)
