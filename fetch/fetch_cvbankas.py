@@ -11,7 +11,6 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from log_config import logger
 from config import (
-    CVBANKAS_KEYWORDS,
     CVBANKAS_IGNORE_WORDS_IN_JOB_TITLE,
     CVBANKAS_IGNORE_WORDS_IN_JOB_COMPANY,
 )
@@ -20,37 +19,43 @@ from config import (
 load_dotenv()
 
 
-def fetch_cvbankas_jobs():
+def fetch_cvbankas_jobs(keyword, pages, salary, filter_to):
     logger.info("Fetching CVBankas jobs...")
     jobs = []
 
-    for keyword in CVBANKAS_KEYWORDS:
-        for page in range(1, 10):  # how many pages to fetch?
-            url = f"https://en.cvbankas.lt/?keyw={keyword}&page={page}"
+    for page in range(1, pages):
+        url = f"https://en.cvbankas.lt/?keyw={keyword}&page={page}"
 
-            try:
-                response = requests.get(url)
-                response.raise_for_status()
-                soup = BeautifulSoup(response.text, "html.parser")
-                job_listings = soup.find_all("article", class_="list_article")
+        try:
+            response = requests.get(url)
+            response.raise_for_status()
+            soup = BeautifulSoup(response.text, "html.parser")
+            job_listings = soup.find_all("article", class_="list_article")
 
-                for job in job_listings:
-                    job_data = {
-                        "title": job.find("h3", class_="list_h3").text.strip(),
-                        "company": job.find("span", class_="dib mt5 mr5").text.strip(),
-                        "salary": extract_salary(job),
-                        "keyword": keyword,
-                        "job_posted": extract_job_posted(job),
-                        "city": extract_city(job),
-                        "href": job.find("a")["href"],
-                    }
-                    jobs.append(job_data)
+            for job in job_listings:
+                job_data = {
+                    "title": job.find("h3", class_="list_h3").text.strip(),
+                    "company": job.find("span", class_="dib mt5 mr5").text.strip(),
+                    "salary": extract_salary(job),
+                    "keyword": keyword,
+                    "job_posted": extract_job_posted(job),
+                    "city": extract_city(job),
+                    "href": job.find("a")["href"],
+                }
+                jobs.append(job_data)
 
-            except Exception as e:
-                logger.error(f"Error fetching data for {keyword} page {page}: {e}")
+        except Exception as e:
+            logger.error(f"Error fetching data for {keyword} page {page}: {e}")
 
-    logger.info(f"Fetched {len(jobs)} job listings")
-    return jobs
+    logger.info(f"Fetched {len(jobs)} job listings for keyword: '{keyword}'")
+    filtered_jobs = filter_cvbankas_jobs(jobs, salary, filter_to)
+
+    # Move jobs with "kokyb" in the title to the top of the list
+    kokyb_jobs = [job for job in filtered_jobs if "kokyb" in job["title"].lower()]
+    other_jobs = [job for job in filtered_jobs if "kokyb" not in job["title"].lower()]
+    filtered_jobs = kokyb_jobs + other_jobs
+
+    return filtered_jobs
 
 
 def extract_salary(job):
@@ -81,7 +86,7 @@ def extract_city(job):
     return city_elem.text.strip() if city_elem else "N/A"
 
 
-def filter_cvbankas_jobs(jobs):
+def filter_cvbankas_jobs(jobs, salary, filter_to):
     def is_valid_job(job):
         if job["salary"] == "N/A":
             return False
@@ -90,7 +95,7 @@ def filter_cvbankas_jobs(jobs):
                 "".join(filter(str.isdigit, job["salary"].split("-")[0]))
             )
             return (
-                salary_value >= 3000
+                salary_value >= salary
                 and not any(
                     keyword.lower() in job["title"].lower()
                     for keyword in CVBANKAS_IGNORE_WORDS_IN_JOB_TITLE
@@ -104,8 +109,10 @@ def filter_cvbankas_jobs(jobs):
             return False
 
     filtered_jobs = list(filter(is_valid_job, jobs))
-    logger.info(f"Filtered {len(filtered_jobs)} out of {len(jobs)} jobs")
-    return filtered_jobs
+    logger.info(
+        f"Filtered those {len(jobs)} to {len(filtered_jobs)} jobs, returned first {filter_to} according to:min. {salary}eur salary requirements and ignored words in job title:{CVBANKAS_IGNORE_WORDS_IN_JOB_TITLE} as well as ignored words in job company:{CVBANKAS_IGNORE_WORDS_IN_JOB_COMPANY} "
+    )
+    return filtered_jobs[:filter_to]
 
 
 def save_cvbankas_jobs(jobs):
@@ -125,11 +132,9 @@ def save_cvbankas_jobs(jobs):
         logger.error(f"Failed to save data: {e}")
 
 
-# TODO run this service as a service so get fresh jobs each day
 def main():
-    jobs = fetch_cvbankas_jobs()
-    filtered_jobs = filter_cvbankas_jobs(jobs)
-    save_cvbankas_jobs(filtered_jobs)
+    jobs = fetch_cvbankas_jobs(keyword="vadovas", pages=2, salary=3000, filter_to=5)
+    save_cvbankas_jobs(jobs)
 
 
 if __name__ == "__main__":

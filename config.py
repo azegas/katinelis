@@ -26,7 +26,6 @@ END_DATE_UNIX = int(end_date.timestamp())
 END_DATE_HUMAN = end_date.strftime("%Y-%m-%d")
 
 # CVBankas
-CVBANKAS_KEYWORDS = ["django", "vadovas"]
 CVBANKAS_IGNORE_WORDS_IN_JOB_TITLE = [
     "Senior",
     "Stat",
