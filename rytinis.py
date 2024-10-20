@@ -10,6 +10,7 @@ from datetime import datetime
 from fetch.fetch_weather import fetch_weather
 from fetch.fetch_nasa import fetch_nasa
 from fetch.fetch_quote import fetch_quote
+from fetch.fetch_vix import fetch_vix
 
 
 load_dotenv()
@@ -24,13 +25,19 @@ def message_rytine(message):
         "chat_id": CHAT_ID,
         "text": message,
     }
-    requests.post(url, data=payload)
+    try:
+        response = requests.post(url, data=payload)
+        response.raise_for_status()  # Raise an exception for bad status codes
+        print("fsio haraso, issisiunte rytine")
+    except requests.RequestException as e:
+        print(f"Error sending message: {e}")
 
 
 def process():
     combined_message = (
         f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n"
         f"Labas rytas! ☀️😙\n\n"
+        f"{fetch_vix()}\n\n"
         f"Orelis Kiūčiuose: \n\n"
         f"{fetch_weather()}\n"
         f"{read_sensor_data()}\n\n"

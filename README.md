@@ -116,6 +116,8 @@ So now when someone is interacting wiht the bot, it can write `/` to see all the
 
 ## About all the services
 
+TODO make docker images instead? Easier with logging maybe... can see them all in one streap, one docker container stream. OR a few, does not matter.
+
 ## About cronjobs
 
 ```bash

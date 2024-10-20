@@ -6,6 +6,7 @@ from telegram.telegram_sensor import message_sensor
 from telegram.telegram_quote import message_quote
 from telegram.telegram_cvbankas import message_cvbankas
 from telegram.telegram_hello import message_hello
+from telegram.telegram_vix import message_vix
 
 # TODO logging to each step like in ahs. Logs for service statuses also
 
@@ -18,6 +19,15 @@ def get_updates(offset=None):
     params = {"offset": offset, "timeout": 100}  # Long polling
     response = requests.get(url, params=params)
     return response.json()
+
+
+"""
+labas - labas ir info
+citke - citata
+tempe - temperatura + dregme kiuciu chatoj
+jobs - cvbankas vadovo darbai
+vix - vix skaiciukas
+"""
 
 
 def main():
@@ -53,6 +63,10 @@ def main():
 
                     elif text == "/jobs@BotauskasBot" or text == "/jobs":
                         message_cvbankas()
+                        print("response sent")
+
+                    elif text == "/vix@BotauskasBot" or text == "/vix":
+                        message_vix()
                         print("response sent")
 
         time.sleep(1)  # Sleep for a second before polling again

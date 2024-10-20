@@ -22,6 +22,11 @@ def fetch_quote():
         context.check_hostname = False
         context.verify_mode = ssl.CERT_NONE
 
+        # Suppress the InsecureRequestWarning
+        requests.packages.urllib3.disable_warnings(
+            requests.packages.urllib3.exceptions.InsecureRequestWarning
+        )
+
         response = requests.get(url, verify=False)
         response.raise_for_status()  # Raise an exception for bad status codes
         data = response.json()
