@@ -45,10 +45,12 @@ def process():
         f"{fetch_quote()}\n\n"
         f"Dienos NASA paveiksliukas: \n\n"
         f"{fetch_nasa()}\n\n"
-        # TODO menulis
-        # TODO saule teka/leidziasi
     )
     message_rytine(combined_message)
+    message_rytine(
+        f"Vadovas darbeliai nuo 3000eur:\n\n"
+        f"{message_cvbankas(keyword='vadovas', pages=5, salary=3000, filter_to=10)}"
+    )
 
 
 def main():

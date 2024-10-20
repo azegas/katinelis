@@ -12,38 +12,28 @@ BASE_DIR = os.getenv("BASE_DIR")
 # Add the parent directory to sys.path (for log_config)
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-
-def get_cvbankas_data():
-    file_path = os.path.join(BASE_DIR, "data/data_cvbankas.json")
-    if os.path.exists(file_path):
-        with open(file_path, "r") as file:
-            data = json.load(file)
-            if "jobs" in data and isinstance(data["jobs"], list):
-                data["jobs"] = data["jobs"][:3]
-            return data
-    return {"error": "Data not found"}
+from fetch.fetch_cvbankas import fetch_cvbankas_jobs
 
 
-def send_cvbankas_to_telegram(data):
-    url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
+def message_cvbankas(keyword, pages, salary, filter_to):
+    data = fetch_cvbankas_jobs(
+        keyword=keyword, pages=pages, salary=salary, filter_to=filter_to
+    )
 
-    # Format the job data into a message
-    if "jobs" in data and isinstance(data["jobs"], list):
-        message = "Latest Job Listings:\n\n"
-        for job in data["jobs"]:
-            message += f"Pavadinimas: {job['title']}\n"
-            message += f"Kompanija: {job['company']}\n"
-            message += f"Alga: {job['salary']}\n"
-            message += f"Miestas: {job['city']}\n"
-            message += f"Paskelbtas: {job['job_posted']}\n"
-            message += f"Nuoroda: {job['href']}\n\n"
+    if isinstance(data, list):
+        message = ""
+        for job in data:
+            message += f"Title: {job['title']}\n"
+            message += f"Company: {job['company']}\n"
+            message += f"Salary: {job['salary']}\n"
+            message += f"City: {job['city']}\n"
+            message += f"Posted: {job['job_posted']}\n"
+            message += f"Link: {job['href']}\n\n"
     else:
         message = "No job listings available."
 
-    payload = {"chat_id": CHAT_ID, "text": message}
-    requests.post(url, data=payload)
+    return message
 
 
-def message_cvbankas():
-    data = get_cvbankas_data()
-    return send_cvbankas_to_telegram(data)
+if __name__ == "__main__":
+    message_cvbankas(keyword="vadovas", pages=5, salary=3000, filter_to=10)

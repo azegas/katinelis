@@ -20,7 +20,6 @@ load_dotenv()
 
 
 def fetch_cvbankas_jobs(keyword, pages, salary, filter_to):
-    logger.info("Fetching CVBankas jobs...")
     jobs = []
 
     for page in range(1, pages):
@@ -47,7 +46,7 @@ def fetch_cvbankas_jobs(keyword, pages, salary, filter_to):
         except Exception as e:
             logger.error(f"Error fetching data for {keyword} page {page}: {e}")
 
-    logger.info(f"Fetched {len(jobs)} job listings for keyword: '{keyword}'")
+    # logger.info(f"Fetched {len(jobs)} job listings for keyword: '{keyword}'")
     filtered_jobs = filter_cvbankas_jobs(jobs, salary, filter_to)
 
     # Move jobs with "kokyb" in the title to the top of the list
@@ -109,9 +108,9 @@ def filter_cvbankas_jobs(jobs, salary, filter_to):
             return False
 
     filtered_jobs = list(filter(is_valid_job, jobs))
-    logger.info(
-        f"Filtered those {len(jobs)} to {len(filtered_jobs)} jobs, returned first {filter_to} according to:min. {salary}eur salary requirements and ignored words in job title:{CVBANKAS_IGNORE_WORDS_IN_JOB_TITLE} as well as ignored words in job company:{CVBANKAS_IGNORE_WORDS_IN_JOB_COMPANY} "
-    )
+    # logger.info(
+    #     f"Filtered those {len(jobs)} to {len(filtered_jobs)} jobs, returned first {filter_to} according to:min. {salary}eur salary requirements and ignored words in job title:{CVBANKAS_IGNORE_WORDS_IN_JOB_TITLE} as well as ignored words in job company:{CVBANKAS_IGNORE_WORDS_IN_JOB_COMPANY} "
+    # )
     return filtered_jobs[:filter_to]
 
 
@@ -133,7 +132,7 @@ def save_cvbankas_jobs(jobs):
 
 
 def main():
-    jobs = fetch_cvbankas_jobs(keyword="vadovas", pages=2, salary=3000, filter_to=5)
+    jobs = fetch_cvbankas_jobs(keyword="vadovas", pages=15, salary=3000, filter_to=10)
     save_cvbankas_jobs(jobs)
 
 
