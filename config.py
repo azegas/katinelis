@@ -27,7 +27,7 @@ END_DATE_HUMAN = end_date.strftime("%Y-%m-%d")
 
 # CVBankas
 CVBANKAS_IGNORE_WORDS_IN_JOB_TITLE = [
-    "Senior",
+    # "Senior",
     "Stat",
     "Konstrukt",
     "aplinkos",

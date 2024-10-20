@@ -106,10 +106,9 @@ if __name__ == "__main__":
 Can also create shortcuts so user does not have to type the commands you want. Go to BotFather, choose `/setcommands` and write such commands:
 
 ```
-labas - labas ir info
-citke - citata
 tempe - temperatura + dregme kiuciu chatoj
-jobs - cvbankas vadovo darbai
+citke - citata
+vix - vix skaiciukas
 ```
 
 So now when someone is interacting wiht the bot, it can write `/` to see all the commands, and then pick a particular one, for example `/labas`.

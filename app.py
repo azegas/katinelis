@@ -22,11 +22,11 @@ def get_updates(offset=None):
 
 
 """
-labas - labas ir info
-citke - citata
 tempe - temperatura + dregme kiuciu chatoj
-jobs - cvbankas vadovo darbai
+citke - citata
 vix - vix skaiciukas
+django - cvbankas django darbai
+vadovas - cvbankas vadovo darbai
 """
 
 
@@ -49,20 +49,12 @@ def main():
 
                     print(f"{user} says: {text}")  # Log the received message
 
-                    if text == "/labas@BotauskasBot" or text == "/labas":
-                        message_hello()
-                        print("response sent")
-
-                    elif text == "/tempe@BotauskasBot" or text == "/tempe":
+                    if text == "/tempe@BotauskasBot" or text == "/tempe":
                         message_sensor()
                         print("response sent")
 
                     elif text == "/citke@BotauskasBot" or text == "/citke":
                         message_quote()
-                        print("response sent")
-
-                    elif text == "/jobs@BotauskasBot" or text == "/jobs":
-                        message_cvbankas()
                         print("response sent")
 
                     elif text == "/vix@BotauskasBot" or text == "/vix":

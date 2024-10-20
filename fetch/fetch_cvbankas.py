@@ -41,7 +41,8 @@ def fetch_cvbankas_jobs(keyword, pages, salary, filter_to):
                     "city": extract_city(job),
                     "href": job.find("a")["href"],
                 }
-                jobs.append(job_data)
+                if job_data not in jobs:  # Check if the job is already in the list
+                    jobs.append(job_data)
 
         except Exception as e:
             logger.error(f"Error fetching data for {keyword} page {page}: {e}")
@@ -132,7 +133,7 @@ def save_cvbankas_jobs(jobs):
 
 
 def main():
-    jobs = fetch_cvbankas_jobs(keyword="vadovas", pages=15, salary=3000, filter_to=10)
+    jobs = fetch_cvbankas_jobs(keyword="django", pages=5, salary=1000, filter_to=10)
     save_cvbankas_jobs(jobs)
 
 

@@ -48,8 +48,12 @@ def process():
     )
     message_rytine(combined_message)
     message_rytine(
-        f"Vadovas darbeliai nuo 3000eur:\n\n"
+        f"'Vadovas' darbeliai nuo 3000eur:\n\n"
         f"{message_cvbankas(keyword='vadovas', pages=5, salary=3000, filter_to=10)}"
+    )
+    message_rytine(
+        f"Django darbeliai:\n\n"
+        f"{message_cvbankas(keyword='django', pages=5, salary=1000, filter_to=10)}"
     )
 
 
