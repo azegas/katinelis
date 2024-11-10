@@ -1,6 +1,13 @@
 import RPi.GPIO as GPIO
 import time
 
+"""
+Kai pi usb ziuri i apacia:
+Raudonas - pliusas - 2pin desineje
+Juodas - minusas - 5pin kaireje
+Geltonas - duomenys - 7pin kaireje
+"""
+
 # Set up GPIO using BCM numbering
 GPIO.setmode(GPIO.BCM)
 
