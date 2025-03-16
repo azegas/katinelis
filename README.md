@@ -1,3 +1,16 @@
+# 2025-03-16
+
+wanted to use raspberry for something else, so disabled the enabled services:
+
+```bash
+systemctl list-unit-files --type=service --state=enabled
+sudo systemctl disable service_katinelis_app.service
+sudo systemctl disable service_katinelis_rytinis.service
+sudo systemctl disable service_katinelis_sensor.service
+```
+
+Simply noting this to myself not to get confused as of why things are not working automatically on raspi boot :)
+
 # Katinelis
 
 This repo was made by duplicating [this MM2 repo at this time](https://github.com/azegas/mm2/tree/e526029dbc7a5c8f6cc1cc5abc02875324583419)
