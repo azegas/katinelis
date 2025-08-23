@@ -13,6 +13,8 @@ Simply noting this to myself not to get confused as of why things are not workin
 
 # Katinelis
 
+![img](img.png)
+
 This repo was made by duplicating [this MM2 repo at this time](https://github.com/azegas/mm2/tree/e526029dbc7a5c8f6cc1cc5abc02875324583419)
 
 Monitor was ditched, since there was a need for it and mm2 could no longer be used. But what will we try to accomplish in this app is:
